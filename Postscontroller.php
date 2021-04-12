@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\detail;
 use DB;
+
 use App\Models\loan;
 use App\Models\login;
 Use App\Models\signup;
 Use App\Http\Controllers\Auth;
+use App\Http\Controllers\details;
 
-
-
-use App\Http\Controllers\Controller;
 class Postscontroller extends Controller
 
 {
@@ -28,8 +27,14 @@ class Postscontroller extends Controller
 
 }
 
+public function search(Request $request) {
+    $search = $request->get('search');
+    $details = DB::table('details')->where('fname', 'like', '%'.$search.'%')->paginate(5);
+    return view('search', ['details' => $details]);
 
 
+
+}
 
 
 public function all_details()
@@ -124,17 +129,52 @@ public function create_signup(Request $req)
 }
 
 
+
+
+
 public function details() {
     // Your logic here
     return view('details',);
    }
 
 
-   public function tabledetails() {
-    // Your logic here
-    return view( 'tabledetails');
+
+   public function edit($details)
+
+   {
+
+    $details= detail::All();
+    $details=detail::find($details);
+    return view('edit', compact('details','details'));
    }
-}
+
+    public  function update(Request $request,$details)
+    {
+        
+        $input=$request->all();
+
+        $details = detail::findOrFail($details);
+        $details->fname = $input['fname'];
+        $details->lname = $input['lname'];
+        $details->idno = $input['idno'];
+        $details->phone = $input['phone'];
+        $details->estate = $input['estate'];
+        $details->city = $input['city'];
+        $details->county = $input['county'];
+        $details->country = $input['country'];
+        $details->firstname = $input['firstname'];
+        $details->lastname = $input['lastname'];
+        $details->idnumber = $input['idnumber'];
+        $details->number =  $input['idnumber'];
+        $details->save();
+
+        return redirect('/');
+
+    }
+   }
+
+
+
 
 
 
