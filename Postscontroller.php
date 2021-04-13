@@ -131,47 +131,55 @@ public function create_signup(Request $req)
 
 
 
-
-public function details() {
+function details() {
     // Your logic here
-    return view('details',);
+    $details=detail::all();
+
+    return view('details',['details'=>$details]);
    }
 
 
 
-   public function edit($details)
+   function delete($idno){
 
-   {
+    $details=detail::find($idno);
+    $details->delete();
+    return redirect('search');
 
-    $details= detail::All();
-    $details=detail::find($details);
-    return view('edit', compact('details','details'));
-   }
+}
 
-    public  function update(Request $request,$details)
+
+    function show($idno)
     {
-        
-        $input=$request->all();
+       $details= detail::find($idno);
 
-        $details = detail::findOrFail($details);
-        $details->fname = $input['fname'];
-        $details->lname = $input['lname'];
-        $details->idno = $input['idno'];
-        $details->phone = $input['phone'];
-        $details->estate = $input['estate'];
-        $details->city = $input['city'];
-        $details->county = $input['county'];
-        $details->country = $input['country'];
-        $details->firstname = $input['firstname'];
-        $details->lastname = $input['lastname'];
-        $details->idnumber = $input['idnumber'];
-        $details->number =  $input['idnumber'];
-        $details->save();
-
-        return redirect('/');
-
+       return view('edit',['details'=>$details]);
     }
+    function update(Request $req)
+    {
+        $details= detail::find($req->idno);
+        $details->fname=$req->fname;
+        $details->lname=$req->lname;
+        $details->idno=$req->idno;
+        $details->phone=$req->phone;
+        $details->estate=$req->estate;
+        $details->city=$req->city;
+        $details->county=$req->county;
+        $details->country=$req->country;
+        $details->firstname=$req->firstname;
+        $details->lastname=$req->lastname;
+        $details->idnumber=$req->idnumber;
+        $details->number=$req->number;
+
+        $details->save();
+        return redirect('search');
+    }
+
+
+
    }
+
+
 
 
 
